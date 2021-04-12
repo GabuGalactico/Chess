@@ -102,8 +102,8 @@ function move($tabuleiro, $start, $end, $quemjoga)
                 $valido = Rook::VerificaMovimento($movimento, $tabuleiro, $quemjoga);
                 break;
         }
-        if ($valido) {
 
+        if ($valido) {
             $tabuleiro[$movimento[2]][$movimento[3]] = $tabuleiro[$movimento[0]][$movimento[1]];
             $tabuleiro[$movimento[0]][$movimento[1]] = '-';
             if ($quemjoga == 'white') {
@@ -111,6 +111,41 @@ function move($tabuleiro, $start, $end, $quemjoga)
             }
             if ($quemjoga == 'black') {
                 $_SESSION['quemjoga'] = 'white';
+            }
+            $check = check($tabuleiro, $quemjoga);
+            $reis = acharRei($tabuleiro, $quemjoga);
+            $rei = [];
+            if ($quemjoga == 'black') {
+                array_push($rei, $reis[1][0], $reis[1][1], $reis[1][2]);
+            }
+            if ($quemjoga == 'white') {
+                array_push($rei, $reis[0][0], $reis[0][1], $reis[0][2]);
+            }
+            if ($check == false) {
+                echo 'false';
+            } else {
+                echo 'true';
+            }
+            //make color red
+            echo '<pre>';
+            print_r($rei);
+            echo '</pre>';
+            if ($check == true) {
+                echo 'check true';
+                if ($rei[2] == 'x1') {
+                    $tabuleiro[$rei[0]][$rei[1]] = 'x11';
+                } else if ($rei[2] == 'x2') {
+                    $tabuleiro[$rei[0]][$rei[1]] = 'x12';
+                }
+            } else if ($check == false) {
+                echo 'oi';
+                if ($reis[0][2] == 'x11') {
+                    echo 'oi';
+                    $tabuleiro[$reis[0][0]][$reis[0][1]] = 'x1';
+                } else if ($reis[1][2] == 'x12') {
+                    echo 'oi';
+                    $tabuleiro[$reis[1][0]][$reis[2][1]] = 'x2';
+                }
             }
             return $tabuleiro;
         } else {
@@ -159,4 +194,76 @@ function desenharTabuleiro($tabuleiro)
         echo '<p>' . $labelColuna[$i] . '</p>';
     }
     echo '</div>'; //coluna
+}
+function check($tabuleiro, $quemjoga)
+{
+    $reis = acharRei($tabuleiro);
+    //Knight
+    if (0 == 0) {
+        $rei = [];
+        $return = 'x1';
+        $true = [$return, true];
+        array_push($rei, $reis[0][0], $reis[0][1], $reis[0][2]);
+        $a = 1;
+        $l = 2;
+        $k = 2;
+        for ($x = 0; $x < 2; $x++) {
+            for ($i = 1; $i < 3; $i++) {
+                if ($rei[0] - $a > 0 && $rei[1] - $l > 0) {
+                    if ($tabuleiro[$rei[0] - $a][$rei[1] - $l] == 'k' . $k) {
+                        return $true;
+                    }
+                }
+                if ($rei[0] + $a < 8 && $rei[1] + $l < 8) {
+                    if ($tabuleiro[$rei[0] + $a][$rei[1] + $l] == 'k' . $k) {
+                        return $true;
+                    }
+                }
+                if ($rei[0] + $a < 8 && $rei[1] - $l > 0) {
+                    if ($tabuleiro[$rei[0] + $a][$rei[1] - $l] == 'k' . $k) {
+                        return $true;
+                    }
+                }
+                if ($rei[0] - $a > 0 && $rei[1] + $l < 8) {
+                    if ($tabuleiro[$rei[0] - $a][$rei[1] + $l] == 'k' . $k) {
+                        return $true;
+                    }
+                }
+                $a++;
+                $l--;
+            }
+            $k--;
+            $a--;
+            $l++;
+            $return = 'x2';
+            $true = [$return, true];
+
+            $rei = [$reis[1][0], $reis[1][1], $reis[1][2]];
+        }
+        $false = ['', 'false'];
+        return $false;
+    }
+}
+function acharRei($tabuleiro)
+{
+    $rei = [];
+    $rei2 = [];
+    for ($i = 0; $i < 8; $i++) {
+        for ($a = 0; $a < 8; $a++) {
+            if ($tabuleiro[$i][$a] == 'x1') {
+                array_push($rei, $i, $a, 'x1');
+            }
+            if ($tabuleiro[$i][$a] == 'x11') {
+                array_push($rei, $i, $a, 'x11');
+            }
+            if ($tabuleiro[$i][$a] == 'x2') {
+                array_push($rei2, $i, $a, 'x2');
+            }
+            if ($tabuleiro[$i][$a] == 'x22') {
+                array_push($rei2, $i, $a, 'x22');
+            }
+        }
+    }
+    $reis = [$rei, $rei2];
+    return $reis;
 }

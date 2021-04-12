@@ -26,14 +26,14 @@ if (isset($_POST['acao']) && $_POST['acao'] == 'restart') {
                 $_SESSION['tabuleiro'] = move($_SESSION['tabuleiro'], $start, $end, $_SESSION['quemjoga']);
             }
         } else {
-            $linha1 = ['r1', 'k1', 'b1', 'q1', 'x1', 'b1', 'k1', 'r1'];
+            $linha1 = ['r1', 'k1', 'b1', 'q1', 'x1', 'b1', '-', 'r1'];
             $linha2 = ['p1', 'p1', 'p1', 'p1', 'p1', 'p1', 'p1', 'p1'];
             $linha3 = ['-', '-', '-', '-', '-', '-', '-', '-'];
-            $linha4 = ['-', '-', '-', '-', '-', '-', '-', '-'];
+            $linha4 = ['-', '-', '-', '-', '-', 'k1', '-', '-'];
             $linha5 = ['-', '-', '-', '-', '-', '-', '-', '-'];
-            $linha6 = ['-', '-', '-', '-', '-', '-', '-', '-'];
+            $linha6 = ['-', '-', '-', '-', 'x2', '-', '-', '-'];
             $linha7 = ['p2', 'p2', 'p2', 'p2', 'p2', 'p2', 'p2', 'p2'];
-            $linha8 = ['r2', 'k2', 'b2', 'x2', 'q2', 'b2', 'k2', 'r2'];
+            $linha8 = ['r2', 'k2', 'b2', '-', 'q2', 'b2', 'k2', 'r2'];
             $tabuleiro = [$linha1, $linha2, $linha3, $linha4, $linha5, $linha6, $linha7, $linha8];
             $_SESSION['tabuleiro'] = $tabuleiro;
             $_SESSION['quemjoga'] = 'white';
